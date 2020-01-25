@@ -18,6 +18,9 @@ template <typename T> class Vector {
         void copy_from(T const *vector, Rank low, Rank high);
         void expand();
         void shrink();
+        static Rank bin_search_a(T *elems, T const &elem, Rank low, Rank high);
+        static Rank bin_search_b(T *elems, T const &elem, Rank low, Rank high);
+        static Rank bin_search_c(T *elems, T const &elem, Rank low, Rank high);
     public:
         Vector<T>(int capacity = DEFAULT_CAPACITY);
         Vector<T>(T const *vector, Rank low, Rank high);
@@ -30,12 +33,14 @@ template <typename T> class Vector {
         int capacity();
         T get(Rank rank);
         void print(T &elem);
+        bool empty();
         // Writable interfaces
         int put(Rank rank, T elem);
         int insert(Rank rank, T elem);
         int remove(Rank rank);
         int disordered();
         int sort();
+        void bubble_sort(Rank low, Rank high);
         // Iterator interfaces
         Rank find(T elem);
         T search(T elem);

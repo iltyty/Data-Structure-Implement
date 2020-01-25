@@ -17,6 +17,8 @@ void test_find(Vector<T> &vector);
 template <typename T>
 void test_traverse(Vector<T> &vector);
 void test_uniquify();
+template <typename T>
+void test_bubble_sort(Vector<T> &vector);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -47,6 +49,7 @@ void test_vector(int size) {
     test_find(vector);
     test_traverse(vector);
     test_uniquify();
+    test_bubble_sort(vector);
 }
 
 template <typename T>
@@ -105,4 +108,12 @@ void test_uniquify() {
     vector.put(3, 3);
     vector.uniquify();
     cout << vector;
+}
+
+template <typename T>
+void test_bubble_sort(Vector<T> &vector) {
+    cout << "test 8: function bubble sort " << endl;
+    cout << "        before sort: " << vector;
+    vector.bubble_sort(0, vector.size());
+    cout << "        after sort: " << vector;
 }

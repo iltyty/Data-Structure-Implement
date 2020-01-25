@@ -57,6 +57,73 @@ void Vector<T>::shrink() {
     delete old_elems;
 }
 
+/*
+ * Binary search between [low, high), version 1.0
+ * Right subinterval: one comparison
+ * Left subinterval: two comparison
+ * Prerequisite: a non-descending vector
+ */
+template <typename  T>
+static Rank bin_search_a(T *elems, T const &elem, Rank low, Rank high) {
+    while (low < high) {
+        Rank mid = (low + high) / 2;
+        if (elems[mid] < elem) {
+            // (mid, high)
+            low = ++mid;
+        } else if (elems[mid] > elem) {
+            // [low, mid)
+            high = mid;
+        } else {
+            return mid;
+        }
+    }
+    // Search failed
+    return -1;
+}
+
+/*
+ * Binary search, version 2.0
+ * Left/Right subinterval: both one comparison
+ * Better under worst circumstances
+ * Worse under best circumstances
+ * More stable over all performance
+ */
+template <typename  T>
+static Rank bin_search_b(T *elems, T const &elem, Rank low, Rank high) {
+    while (high - low > 1) {
+        Rank mid = (low + high) / 2;
+        if (elems[mid] < elem) {
+            // [mid, high)
+            low = mid;
+        } else {
+            // [low, mid)
+            high = mid;
+        }
+    }
+    return elem == elems[low] ?
+        low : -1;
+}
+
+/*
+ * Binary search, version 3.0
+ * Left/Right subinterval: both one comparison
+ * Return the rank of the largest element not greater than elem
+ */
+template <typename  T>
+static Rank bin_search_c(T *elems, T const &elem, Rank low, Rank high) {
+    while (low < high) {
+        Rank mid = (low + high) / 2;
+        if (elems[mid] < elem) {
+            // (mid, high)
+            low = ++mid;
+        } else {
+            // [low, mid)
+            high = mid;
+        }
+    }
+    return --low;
+}
+
 template <typename  T>
 Vector<T>::Vector(int capacity) {
     _size = 0;
@@ -102,8 +169,13 @@ T Vector<T>::get(Rank rank) {
 }
 
 template <typename T>
-void print(T &elem) {
+void Vector<T>::print(T &elem) {
     cout << elem << " ";
+}
+
+template <typename T>
+bool Vector<T>::empty() {
+    return !_size;
 }
 
 /*
@@ -197,6 +269,24 @@ int Vector<T>::sort() {
     return 0;
 }
 
+/*
+ * Bubble sort between [low, high)
+ */
+template <typename T>
+void Vector<T>::bubble_sort(Rank low, Rank high) {
+    int times = high - low - 1;
+    for (int i = 0; i < times; i++) {
+        // Scan times: high - low
+        int lower_bound = low + i;
+        for (int j = high - 1; j > lower_bound; j--) {
+            if (_elem[j] < _elem[j - 1]) {
+                T tmp = _elem[j];
+                _elem[j] = _elem[j - 1];
+                _elem[j - 1] = tmp;
+            }
+        }
+    }
+}
 /*
  * Return the rank of element elem
  * Return:
