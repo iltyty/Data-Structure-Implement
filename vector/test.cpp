@@ -1,4 +1,3 @@
-#include "vector.h"
 #include "vector.cpp"
 
 template <typename T>
@@ -17,6 +16,7 @@ template <typename T>
 void test_find(Vector<T> &vector);
 template <typename T>
 void test_traverse(Vector<T> &vector);
+void test_uniquify();
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -46,6 +46,7 @@ void test_vector(int size) {
     test_remove(vector);
     test_find(vector);
     test_traverse(vector);
+    test_uniquify();
 }
 
 template <typename T>
@@ -92,4 +93,16 @@ void test_traverse(Vector<T> &vector) {
     cout << "test6: function traverse ";
     void (*fp) (T&) = print_;
     vector.traverse(fp);
+    cout << endl;
+}
+
+void test_uniquify() {
+    cout << "test7: function uniquify ";
+    Vector<int> vector;
+    vector.put(0, 1);
+    vector.put(1, 1);
+    vector.put(2, 2);
+    vector.put(3, 3);
+    vector.uniquify();
+    cout << vector;
 }

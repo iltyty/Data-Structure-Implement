@@ -39,7 +39,6 @@ template <typename T> class Vector {
         // Iterator interfaces
         Rank find(T elem);
         T search(T elem);
-        int deduplicate();
         int uniquify();
         void traverse(void (*) (T&));
         // Overload operator

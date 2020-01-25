@@ -48,7 +48,6 @@ void Vector<T>::shrink() {
     }
     _capacity /= 2;
 
-    cout << _size << " " << _capacity << endl;
     T *old_elems = _elem;
     _elem = new T[_capacity];
     for (int i = 0; i < _size; i++) {
@@ -220,14 +219,22 @@ T Vector<T>::search(T elem) {
     return t;
 }
 
-template <typename T>
-int Vector<T>::deduplicate() {
-    return 0;
-}
-
+/*
+ * Delete all duplicate elements
+ * Prerequisite: an ordered vector
+ * Return: number of elements deleted
+ */
 template <typename T>
 int Vector<T>::uniquify() {
-    return 0;
+    Rank i = 0, j = 0;
+    while (++j < _size) {
+        if (_elem[i] != _elem[j]) {
+            _elem[++i] = _elem[j];
+        }
+    }
+    _size = ++i;
+    shrink();
+    return j - i;
 }
 
 // Similar to function map in JavaScript
