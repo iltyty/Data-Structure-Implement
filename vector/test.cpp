@@ -1,7 +1,7 @@
 #include "vector.cpp"
 
 template <typename T>
-void print_(T&);
+void increase(T&);
 template <typename T>
 void test_vector(int size);
 template <typename T>
@@ -13,7 +13,7 @@ void test_opt_brk(Vector<T> &vector);
 template <typename T>
 void test_remove(Vector<T> &vector);
 template <typename T>
-void test_find(Vector<T> &vector);
+void test_search(Vector<T> &vector);
 template <typename T>
 void test_traverse(Vector<T> &vector);
 void test_uniquify();
@@ -25,6 +25,8 @@ template <typename T>
 void test_bubble_sort_c(Vector<T> &vector);
 template <typename T>
 void test_merge_sort(Vector<T> &vector);
+template <typename T>
+void test_disordered(Vector<T> &vector);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -36,8 +38,8 @@ int main(int argc, char *argv[]) {
 }
 
 template <typename T>
-void print_(T &elem) {
-    cout << elem << " ";
+void increase(T &elem) {
+    elem++;
 }
 
 template <typename T>
@@ -52,36 +54,38 @@ void test_vector(int size) {
     Vector<T> vector1(vector);
     Vector<T> vector2(vector);
     Vector<T> vector3(vector);
+    Vector<T> vector4(vector);
 
     test_opt_cout(vector);
     test_opt_eq(vector);
     test_opt_brk(vector);
     test_remove(vector);
-    test_find(vector);
+    test_search(vector);
     test_traverse(vector);
     test_uniquify();
     test_bubble_sort_a(vector);
     test_bubble_sort_b(vector1);
     test_bubble_sort_c(vector2);
     test_merge_sort(vector3);
+    test_disordered(vector4);
 }
 
 template <typename T>
 void test_opt_cout(Vector<T> &vector) {
-    cout << "test1: operator '<<' ";
+    cout << "test1:  operator '<<' ";
     cout << vector;
 }
 
 template <typename T>
 void test_opt_eq(Vector<T> &vector) {
-    cout << "test2: operator '='  ";
+    cout << "test2:  operator '='  ";
     Vector<T> vector1 = vector;
     cout << vector1;
 }
 
 template <typename T>
 void test_opt_brk(Vector<T> &vector) {
-    cout << "test3: operator '[]' ";
+    cout << "test3:  operator '[]' ";
     cout << "[ ";
     for (int i = 0; i < vector.size(); i++) {
         // TODO
@@ -94,50 +98,55 @@ void test_opt_brk(Vector<T> &vector) {
 
 template <typename T>
 void test_remove(Vector<T> &vector) {
-    cout << "test4: function remove ";
+    cout << "test4:  function remove ";
     vector.remove(5);
     cout << vector;
 }
 
 template <typename T>
-void test_find(Vector<T> &vector) {
-    cout << "test5: function find ";
-    cout << vector.find(vector[5]) << endl;
+void test_search(Vector<T> &vector) {
+    Vector<T> vec(vector);
+    vec.sort();
+    cout << "test5:  function search " << vec[5] << " in " << vec;
+    cout << "        search result: " << vec.search(vec[5]) << endl;
 }
 
 template <typename T>
 void test_traverse(Vector<T> &vector) {
-    cout << "test6: function traverse ";
-    void (*fp) (T&) = print_;
-    vector.traverse(fp);
-    cout << endl;
+    Vector<T> vec(vector);
+    cout << "test6:  function traverse (add one to each element)" << endl;
+    cout << "        before traverse: " << vec;
+    void (*fp) (T&) = increase<T>;
+    vec.traverse(fp);
+    cout << "        after traverse: " << vec;
 }
 
 void test_uniquify() {
-    cout << "test7: function uniquify ";
+    cout << "test7:  function uniquify" << endl;
     Vector<int> vector;
     vector.put(0, 1);
     vector.put(1, 1);
     vector.put(2, 2);
     vector.put(3, 3);
+    cout << "        before uniquify: " << vector;
     vector.uniquify();
-    cout << vector;
+    cout << "        after uniquify: " << vector;
 }
 
 template <typename T>
 void test_bubble_sort_a(Vector<T> &vector) {
-    cout << "test8: function bubble sort a" << endl;
-    cout << "       before sort: " << vector;
+    cout << "test8:  function bubble sort a" << endl;
+    cout << "        before sort: " << vector;
     vector.bubble_sort_a(0, vector.size());
-    cout << "       after sort: " << vector;
+    cout << "        after sort: " << vector;
 }
 
 template <typename T>
 void test_bubble_sort_b(Vector<T> &vector) {
-    cout << "test9: function bubble sort b" << endl;
-    cout << "       before sort: " << vector;
+    cout << "test9:  function bubble sort b" << endl;
+    cout << "        before sort: " << vector;
     vector.bubble_sort_b(0, vector.size());
-    cout << "       after sort: " << vector;
+    cout << "        after sort: " << vector;
 }
 
 template <typename T>
@@ -154,4 +163,16 @@ void test_merge_sort(Vector<T> &vector) {
     cout << "        before sort: " << vector;
     vector.merge_sort(0, vector.size());
     cout << "        after sort: " << vector;
+}
+
+template <typename T>
+void test_disordered(Vector<T> &vector) {
+    cout << "test12: function disordered" << endl;
+    cout << "        before sort: " << vector;
+    cout << "        disordered: " << (vector.disordered() ?
+        "true" : "false") << endl;
+    vector.sort();
+    cout << "        after sort: " << vector;
+    cout << "        disordered: " << (vector.disordered() ?
+        "true" : "false") << endl;
 }

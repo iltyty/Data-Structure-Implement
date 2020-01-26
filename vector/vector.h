@@ -40,7 +40,7 @@ template <typename T> class Vector {
         int insert(Rank rank, T elem);
         int remove(Rank rank);
         int disordered();
-        int sort();
+        void sort();
         // Bubble sort, all stable
         void bubble_sort_a(Rank low, Rank high);
         void bubble_sort_b(Rank low, Rank high);
@@ -49,8 +49,8 @@ template <typename T> class Vector {
         void merge_sort(Rank low, Rank high);
         void merge(Rank low, Rank mid, Rank high);
         // Iterator interfaces
-        Rank find(T elem);
-        T search(T elem);
+        Rank search(T const &elem);
+        Rank search(T const &elem, Rank low, Rank high);
         int uniquify();
         void traverse(void (*) (T&));
         // Overload operator

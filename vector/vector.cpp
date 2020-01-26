@@ -63,8 +63,8 @@ void Vector<T>::shrink() {
  * Left subinterval: two comparison
  * Prerequisite: a non-descending vector
  */
-template <typename  T>
-static Rank bin_search_a(T *elems, T const &elem, Rank low, Rank high) {
+template <typename T>
+Rank Vector<T>::bin_search_a(T *elems, T const &elem, Rank low, Rank high) {
     while (low < high) {
         Rank mid = (low + high) / 2;
         if (elems[mid] < elem) {
@@ -88,20 +88,19 @@ static Rank bin_search_a(T *elems, T const &elem, Rank low, Rank high) {
  * Worse under best circumstances
  * More stable over all performance
  */
-template <typename  T>
-static Rank bin_search_b(T *elems, T const &elem, Rank low, Rank high) {
+template <typename T>
+Rank Vector<T>::bin_search_b(T *elems, T const &elem, Rank low, Rank high) {
     while (high - low > 1) {
         Rank mid = (low + high) / 2;
-        if (elems[mid] < elem) {
-            // [mid, high)
-            low = mid;
-        } else {
+        if (elems[mid] > elem) {
             // [low, mid)
             high = mid;
+        } else {
+            // [mid, high)
+            low = mid;
         }
     }
-    return elem == elems[low] ?
-        low : -1;
+    return elem == elems[low] ? low : -1;
 }
 
 /*
@@ -109,16 +108,16 @@ static Rank bin_search_b(T *elems, T const &elem, Rank low, Rank high) {
  * Left/Right subinterval: both one comparison
  * Return the rank of the largest element not greater than elem
  */
-template <typename  T>
-static Rank bin_search_c(T *elems, T const &elem, Rank low, Rank high) {
+template <typename T>
+Rank Vector<T>::bin_search_c(T *elems, T const &elem, Rank low, Rank high) {
     while (low < high) {
         Rank mid = (low + high) / 2;
-        if (elems[mid] < elem) {
-            // (mid, high)
-            low = ++mid;
-        } else {
+        if (elems[mid] > elem) {
             // [low, mid)
             high = mid;
+        } else {
+            // (mid, high)
+            low = ++mid;
         }
     }
     return --low;
@@ -255,7 +254,7 @@ int Vector<T>::disordered() {
         return 1;
     }
 
-    int i;
+    int i = 0;
     while (_elem[i] == _elem[i + 1]) {
         i++;
     }
@@ -263,17 +262,20 @@ int Vector<T>::disordered() {
     // true: descending order (if ordered)
     // false: ascending order (if ordered)
     bool flag = _elem[i] > _elem[i + 1];
-    for (i++; i < _size; i++) {
-        if ((_elem[i] >= _elem[i + 1]) != flag) {
-            return false;
+    for (i++; i < _size - 1; i++) {
+        if ((_elem[i] == _elem[i + 1])) {
+            continue;
+        }
+        if ((_elem[i] > _elem[i + 1]) != flag) {
+            return 0;
         }
     }
-    return true;
+    return flag ? -1 : 1;
 }
 
 template <typename T>
-int Vector<T>::sort() {
-    return 0;
+void Vector<T>::sort() {
+    merge_sort(0, _size);
 }
 
  // Bubble sort between [low, high), version 1.0
@@ -383,26 +385,15 @@ void Vector<T>::merge(Rank low, Rank mid, Rank high) {
     delete[] first;
 }
 
-/*
- * Return the rank of element elem
- * Return:
- *   -1 for element not existed
- *   other positive integer for the first matching result
- */
 template <typename T>
-Rank Vector<T>::find(T elem) {
-    for (int i = 0; i < _size; i++) {
-        if (_elem[i] == elem) {
-            return i;
-        }
-    }
-    return -1;
+Rank Vector<T>::search(T const &elem) {
+    return (_size > 0) ?
+        search(elem, 0, _size) : -1;
 }
 
 template <typename T>
-T Vector<T>::search(T elem) {
-    T t;
-    return t;
+Rank Vector<T>::search(T const &elem, Rank low, Rank high) {
+    return Vector<T>::bin_search_c(_elem, elem, low, high);
 }
 
 /*
