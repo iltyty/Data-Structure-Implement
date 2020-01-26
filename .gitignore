@@ -5,4 +5,4 @@ tmp/
 
 
 .ccls-cache/
-*.out
+*/*.out
