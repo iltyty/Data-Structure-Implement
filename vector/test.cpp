@@ -18,7 +18,13 @@ template <typename T>
 void test_traverse(Vector<T> &vector);
 void test_uniquify();
 template <typename T>
-void test_bubble_sort(Vector<T> &vector);
+void test_bubble_sort_a(Vector<T> &vector);
+template <typename T>
+void test_bubble_sort_b(Vector<T> &vector);
+template <typename T>
+void test_bubble_sort_c(Vector<T> &vector);
+template <typename T>
+void test_merge_sort(Vector<T> &vector);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -42,6 +48,11 @@ void test_vector(int size) {
     for (int i = 0; i < size; i++) {
         vector.put(i, rand() % 100);
     }
+
+    Vector<T> vector1(vector);
+    Vector<T> vector2(vector);
+    Vector<T> vector3(vector);
+
     test_opt_cout(vector);
     test_opt_eq(vector);
     test_opt_brk(vector);
@@ -49,7 +60,10 @@ void test_vector(int size) {
     test_find(vector);
     test_traverse(vector);
     test_uniquify();
-    test_bubble_sort(vector);
+    test_bubble_sort_a(vector);
+    test_bubble_sort_b(vector1);
+    test_bubble_sort_c(vector2);
+    test_merge_sort(vector3);
 }
 
 template <typename T>
@@ -111,9 +125,33 @@ void test_uniquify() {
 }
 
 template <typename T>
-void test_bubble_sort(Vector<T> &vector) {
-    cout << "test 8: function bubble sort " << endl;
+void test_bubble_sort_a(Vector<T> &vector) {
+    cout << "test8: function bubble sort a" << endl;
+    cout << "       before sort: " << vector;
+    vector.bubble_sort_a(0, vector.size());
+    cout << "       after sort: " << vector;
+}
+
+template <typename T>
+void test_bubble_sort_b(Vector<T> &vector) {
+    cout << "test9: function bubble sort b" << endl;
+    cout << "       before sort: " << vector;
+    vector.bubble_sort_b(0, vector.size());
+    cout << "       after sort: " << vector;
+}
+
+template <typename T>
+void test_bubble_sort_c(Vector<T> &vector) {
+    cout << "test10: function bubble sort c" << endl;
     cout << "        before sort: " << vector;
-    vector.bubble_sort(0, vector.size());
+    vector.bubble_sort_c(0, vector.size());
+    cout << "        after sort: " << vector;
+}
+
+template <typename T>
+void test_merge_sort(Vector<T> &vector) {
+    cout << "test11: function merge sort" << endl;
+    cout << "        before sort: " << vector;
+    vector.merge_sort(0, vector.size());
     cout << "        after sort: " << vector;
 }

@@ -21,6 +21,7 @@ template <typename T> class Vector {
         static Rank bin_search_a(T *elems, T const &elem, Rank low, Rank high);
         static Rank bin_search_b(T *elems, T const &elem, Rank low, Rank high);
         static Rank bin_search_c(T *elems, T const &elem, Rank low, Rank high);
+        void swap(T &a, T &b);
     public:
         Vector<T>(int capacity = DEFAULT_CAPACITY);
         Vector<T>(T const *vector, Rank low, Rank high);
@@ -40,7 +41,13 @@ template <typename T> class Vector {
         int remove(Rank rank);
         int disordered();
         int sort();
-        void bubble_sort(Rank low, Rank high);
+        // Bubble sort, all stable
+        void bubble_sort_a(Rank low, Rank high);
+        void bubble_sort_b(Rank low, Rank high);
+        void bubble_sort_c(Rank low, Rank high);
+        // Merge sort
+        void merge_sort(Rank low, Rank high);
+        void merge(Rank low, Rank mid, Rank high);
         // Iterator interfaces
         Rank find(T elem);
         T search(T elem);

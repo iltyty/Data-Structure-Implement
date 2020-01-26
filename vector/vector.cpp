@@ -125,6 +125,13 @@ static Rank bin_search_c(T *elems, T const &elem, Rank low, Rank high) {
 }
 
 template <typename  T>
+void Vector<T>::swap(T &a, T &b) {
+    T tmp = a;
+    a = b;
+    b = tmp;
+}
+
+template <typename  T>
 Vector<T>::Vector(int capacity) {
     _size = 0;
     _capacity = capacity;
@@ -269,24 +276,113 @@ int Vector<T>::sort() {
     return 0;
 }
 
-/*
- * Bubble sort between [low, high)
- */
+ // Bubble sort between [low, high), version 1.0
 template <typename T>
-void Vector<T>::bubble_sort(Rank low, Rank high) {
+void Vector<T>::bubble_sort_a(Rank low, Rank high) {
     int times = high - low - 1;
     for (int i = 0; i < times; i++) {
         // Scan times: high - low
-        int lower_bound = low + i;
-        for (int j = high - 1; j > lower_bound; j--) {
+        Rank lower_bound = low + i;
+        for (Rank j = high - 1; j > lower_bound; j--) {
             if (_elem[j] < _elem[j - 1]) {
-                T tmp = _elem[j];
-                _elem[j] = _elem[j - 1];
-                _elem[j - 1] = tmp;
+                swap(_elem[j], _elem[j - 1]);
             }
         }
     }
 }
+
+
+// Bubble sort, version 2.0
+template <typename T>
+void Vector<T>::bubble_sort_b(Rank low, Rank high) {
+    int ordered = true;
+    int times = high - low - 1;
+    for (int i = 0; i < times; i++) {
+        Rank lower_bound = low + i;
+        for (Rank j = high - 1; j > lower_bound; j--) {
+            if (_elem[j] < _elem[j - 1]) {
+                ordered = false;
+                swap(_elem[j], _elem[j - 1]);
+            }
+        }
+        if (ordered) {
+            // The disordered part is ordered, exit sort
+            return;
+        }
+    }
+}
+
+// Bubble sort, version 3.0
+template <typename T>
+void Vector<T>::bubble_sort_c(Rank low, Rank high) {
+    int i = 0;
+    while (i < high) {
+        Rank last_swap = i + 1;
+        for (Rank j = high - 1; j > i; j--) {
+            if (_elem[j] < _elem[j - 1]) {
+                last_swap = j;
+                swap(_elem[j], _elem[j - 1]);
+            }
+        }
+        i = last_swap;
+    }
+}
+
+// Merge sort between [low, high)
+template <typename T>
+void Vector<T>::merge_sort(Rank low, Rank high) {
+    if (high - low < 2) {
+        // high - low == 1
+        // Single element, ordered for sure
+        return;
+    }
+    // Use the midpoint as the pivot
+    Rank mid = (low + high) / 2;
+    // Sort the first half: [low, mid)
+    merge_sort(low, mid);
+    // Sort the second half: [mid, high)
+    merge_sort(mid, high);
+    // Merge
+    merge(low, mid, high);
+}
+
+// Merge [low, mid) and [mid, high)
+template <typename T>
+void Vector<T>::merge(Rank low, Rank mid, Rank high) {
+    // result[0, high - low) = _elem[low, high)
+    T *result = _elem + low;
+    // Only need to duplicate the first half
+    int len1 = mid - low;
+    int len2 = high - mid;
+    T *first = new T[len1];
+    // Second half
+    T *second = _elem + mid;
+
+    // Duplicate the first half
+    for (int i = 0; i < len1 ; i++) {
+        first[i] = result[i];
+    }
+
+    int i = 0;
+    int j = 0;
+    int idx = 0;
+    while (i < len1 && j < len2) {
+        if (first[i] < second[j]) {
+            result[idx++] = first[i++];
+        } else {
+            result[idx++] = second[j++];
+        }
+    }
+    while (i < len1) {
+        result[idx++] = first[i++];
+    }
+    while (j < len2) {
+        result[idx++] = second[j++];
+    }
+
+    delete[] first;
+}
+
 /*
  * Return the rank of element elem
  * Return:
