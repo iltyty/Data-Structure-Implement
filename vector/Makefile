@@ -12,7 +12,7 @@ build:
 	${CC} ${SRC} -o ${OUTPUT}
 
 clean:
-	rm -f *.o
+	rm -f *.o *.out
 
 run:
 	./${OUTPUT} 10

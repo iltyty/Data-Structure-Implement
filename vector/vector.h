@@ -8,7 +8,8 @@ typedef int Rank;
 
 #define DEFAULT_CAPACITY 3
 
-template <typename T> class Vector {
+template <typename T>
+class Vector {
     private:
         Rank _size;    // current scale
         int _capacity; // total capacity
@@ -54,7 +55,7 @@ template <typename T> class Vector {
         int uniquify();
         void traverse(void (*) (T&));
         // Overload operator
-        Vector<T>& operator=(Vector<T> const&);
+        Vector<T> operator=(Vector<T> const&);
         T& operator[](Rank rank);
         friend ostream & operator<<(ostream &os, Vector<T> &vector) {
             cout << "[ ";

@@ -1,4 +1,4 @@
-#include "vector.cpp"
+#include "vector.h"
 
 template <typename T>
 void increase(T&);

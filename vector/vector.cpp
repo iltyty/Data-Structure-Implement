@@ -424,7 +424,7 @@ void Vector<T>::traverse(void (*visit) (T&)) {
 
 // Overload operator "="
 template <typename T>
-Vector<T>& Vector<T>::operator=(Vector<T> const &vector) {
+Vector<T> Vector<T>::operator=(Vector<T> const &vector) {
     return Vector<T>(vector);
 }
 
@@ -433,3 +433,5 @@ template <typename T>
 T& Vector<T>::operator[](Rank rank) {
     return _elem[rank];
 }
+
+template class Vector<int>;
