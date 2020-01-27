@@ -20,18 +20,27 @@ class List {
     protected:
         void init();
         void copy_from(const List<T> &list, Rank rank, int n);
+        void swap(T &a, T &b);
     public:
         List();
         List(const List<T> &list);
-        List(const List<T> &list, Rank low, Rank high);
+        List(const List<T> &list, Rank low, int n);
         ~List();
         Pos(T) first() const;
         Pos(T) last() const;
+        Pos(T) get(Rank n) const;
+
         int size();
         bool empty();
+
         void insert(Rank rank, T elem);
         void append(T elem);
+        T remove(T elem);
         void clear();
+
+        void selection_sort(Rank rank, int n, bool reverse=false);
+        void insertion_sort(Rank rank, int n, bool reverse=false);
+        void sort(bool reverse=false);
 
         T& operator [](int rank);
         friend ostream& operator <<(ostream &os, List<T> &list) {
@@ -67,18 +76,22 @@ void List<T>::copy_from(const List<T> &list, Rank rank, int n) {
     }
  
     if (rank >= list._size || rank < 0) {
-        throw "Cannot copy starting from where out of index";
+        throw "IndexError: Cannot copy starting from where out of index";
     }
 
-    Pos(T) node = list.first();
-    for (int i = 0; i < rank; i++) {
-        node = node->next;
-    }
+    Pos(T) node = list.get(rank);
     n = (rank + n) <= list._size ? n : (list._size - rank);
     for (int i = 0; i < n; i++) {
         this->append(node->data);
         node = node->next;
     }
+}
+
+template <typename T>
+void List<T>::swap(T &a, T &b) {
+    T tmp = a;
+    a = b;
+    b = tmp;
 }
 
 template <typename T>
@@ -102,10 +115,10 @@ List<T>::List(const List<T> &list, Rank rank, int n) {
 template <typename T>
 List<T>::~List() {
     if (header) {
-        delete[] header;
+        delete header;
     }
     if (trailer) {
-        delete[] trailer;
+        delete trailer;
     }
 }
 
@@ -117,6 +130,19 @@ Pos(T) List<T>::first() const {
 template <typename T>
 Pos(T) List<T>::last() const {
     return trailer->pre;
+}
+
+template <typename T>
+Pos(T) List<T>::get(Rank n) const {
+    if (n < 0 || n > _size) {
+        return nullptr;
+    }
+
+    Pos(T) node = header->next;
+    for (int i = 0; i < n; i++) {
+        node = node->next;
+    }
+    return node;
 }
 
 template <typename T>
@@ -160,6 +186,30 @@ void List<T>::insert(Rank rank, T elem) {
     };
 }
 
+
+/*
+ * Remove elememt elem
+ * Throw an error if elem is not in list
+ * Delete the first one when multiple elem exists
+ */
+template <typename T>
+T List<T>::remove(T elem) {
+    Pos(T) node = header;
+    for (int i = 0; i < _size; i++) {
+        node = node->next;
+        if (node->data == elem) {
+            // delete current node and return
+            node->next->pre = node->pre;
+            node->pre->next = node->next;
+            delete node;
+            _size--;
+            return elem;
+        }
+    }
+    // elem does not exist
+    throw "ValueError: list.remove(x): x not in list";
+}
+
 template <typename T>
 void List<T>::clear() {
     if (!_size) {
@@ -169,12 +219,98 @@ void List<T>::clear() {
     Pos(T) node = header;
     for (int i = 0; i < _size; i++) {
         node = node->next;
-        // cout << node->data << endl;
         delete node;
     }
-    header->next = trailer;
-    trailer->pre = header;
+
     _size = 0;
+    Pos(T) header_tmp = header;
+    Pos(T) trailer_tmp = trailer;
+    header = nullptr;
+    trailer = nullptr;
+    delete header_tmp;
+    delete trailer_tmp;
+}
+
+// Sort the total n elements in the list starting at position
+// rank using selection sort (unstable, input insensitive)
+template <typename T>
+void List<T>::selection_sort(int rank, int n, bool reverse) {
+    if (!_size) {
+        return;
+    }
+
+    if (rank >= _size || rank < 0) {
+        throw "IndexError: Cannot sort starting from where out of index";
+    }
+
+    Pos(T) node = get(rank);
+    n = (rank + n) <= _size ? n : _size - rank;
+    for (int i = 0; i < n - 1; i++) {
+        // n-1 times
+        Pos(T) p = node->next;
+        Pos(T) min = node;
+        bool flag = false;
+        for (int j = i; j < n - 1; j++) {
+            if (reverse) {
+                if (p->data > min->data) {
+                    min = p;
+                    flag = true;
+                }
+            } else {
+                if (p->data < min->data) {
+                    min = p;
+                    flag = true;
+                }
+            }
+            p = p->next;
+        }
+        if (flag) {
+            swap(node->data, min->data);
+        }
+        node = node->next;
+    }
+}
+
+// Insertion sort (stable, input sensitive)
+template <typename T>
+void List<T>::insertion_sort(Rank rank, int n, bool reverse) {
+    if (!_size) {
+        return;
+    }
+
+    if (rank >= _size || rank < 0) {
+        throw "IndexError: Cannot sort starting from where out of index";
+    }
+
+    Pos(T) node = get(rank);
+    Pos(T) base = node;
+    n = (rank + n) <= _size ? n : _size - rank;
+    for (int i = 1; i < n; i++) {
+        node = node->next;
+        Pos(T) p = node;
+        while (p != base) {
+            if (reverse) {
+                if (p->data > p->pre->data) {
+                    swap(p->data, p->pre->data);
+                } else {
+                    break;
+                }
+            } else {
+                if (p->data < p->pre->data) {
+                    swap(p->data, p->pre->data);
+                } else {
+                    break;
+                }
+            }
+            p = p->pre;
+        }
+    }
+}
+
+// Sort the whole list
+template <typename T>
+void List<T>::sort(bool reverse) {
+    insertion_sort(0, _size, reverse);
 }
 
 // Append elem to the end of the list
@@ -206,5 +342,6 @@ T& List<T>::operator [](int rank) {
         return node->data;
     }
 }
+
 
 #endif // __LIST_H_
