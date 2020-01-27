@@ -3,6 +3,13 @@
 #include "list.h"
 
 template <typename T>
+struct Increase {
+    virtual void operator () (T &elem) {
+        elem++;
+    }
+};
+
+template <typename T>
 void test_list(int size);
 template <typename T>
 void test_constructor(List<T> &list);
@@ -20,6 +27,10 @@ template <typename T>
 void test_selection_sort(List<T> &list);
 template <typename T>
 void test_insertion_sort(List<T> &list);
+template <typename T>
+void test_search(List<T> &list);
+template <typename T>
+void test_traverse(List<T> &list);
 
 
 int main(int argc, char *argv[]) {
@@ -63,6 +74,8 @@ void test_list(int size) {
     }
     test_selection_sort(list1);
     test_insertion_sort(list2);
+    test_search(list);
+    test_traverse(list);
 }
 
 template <typename T>
@@ -174,4 +187,20 @@ void test_insertion_sort(List<T> &list) {
     cout << "\tsort(6, 100): " << list3;
     list4.insertion_sort(0, 10, true);
     cout << "\treverse sort(0, 10): " << list4;
+}
+
+template <typename T>
+void test_search(List<T> &list) {
+    cout << "test9 function search" << endl;
+    cout << "\tlist: " << list;
+    cout << "\tsearch " << list[5] << ": " << list.search(list[5]) << endl;
+    cout << "\tsearch " << "999" << ": " << list.search(999) << endl;
+}
+
+template <typename T>
+void test_traverse(List<T> &list) {
+    cout << "test10 function traverse (add one to each element)" << endl;
+    cout << "\tbefore increase: " << list;
+    list.traverse(Increase<T>());
+    cout << "\tafter increase:  " << list;
 }

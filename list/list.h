@@ -42,7 +42,13 @@ class List {
         void insertion_sort(Rank rank, int n, bool reverse=false);
         void sort(bool reverse=false);
 
+        // Traverse via function object
+        template <typename VISIT>
+        void traverse(VISIT);
+        int search(T elem);
+
         T& operator [](int rank);
+        List<T> operator = (const List<T> &list);
         friend ostream& operator <<(ostream &os, List<T> &list) {
             cout << "[ ";
             Pos(T) node = list.header;
@@ -320,6 +326,40 @@ void List<T>::append(T elem) {
     trailer->pre->next = node;
     trailer->pre = node;
     _size += 1;
+}
+
+template <typename T>
+template <typename VISIT>
+void List<T>::traverse(VISIT visit) {
+    for (Pos(T) p = header->next; p != trailer; p = p->next) {
+        visit(p->data);
+    }
+}
+
+/*
+ * Search elem in list
+ * Return:
+ *   -1 for not existed
+ *   other non-negative integer for search result
+ */
+template <typename T>
+int List<T>::search(T elem) {
+    int i = -1;
+    Pos(T) p = header;
+    while (p != trailer) {
+        i++;
+        p = p->next;
+        if (p->data == elem) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Overload operator '='
+template <typename T>
+List<T> List<T>::operator = (const List<T> &list) {
+    return List<T>(list);
 }
 
 // Support negative rank access
