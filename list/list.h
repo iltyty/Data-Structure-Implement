@@ -35,6 +35,7 @@ class List {
 
         void insert(Rank rank, T elem);
         void append(T elem);
+        T remove();
         T remove(T elem);
         void clear();
 
@@ -192,6 +193,18 @@ void List<T>::insert(Rank rank, T elem) {
     };
 }
 
+// Remove the last element
+template <typename T>
+T List<T>::remove() {
+    Pos(T) last = this->last();
+    last->pre->next = last->next;
+    last->next->pre = last->pre;
+    T elem = last->data;
+    delete last;
+    _size--;
+
+    return elem;
+}
 
 /*
  * Remove elememt elem
