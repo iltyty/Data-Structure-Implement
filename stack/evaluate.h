@@ -48,7 +48,9 @@ int get(char ch) {
         case '\0':
             return 8;
         default:
-            throw "Illegal operator";
+            string msg = "Illegal operator: ";
+            msg.push_back(ch);
+            throw msg;
     }
 }
 
@@ -60,19 +62,13 @@ bool is_digit(char ch) {
     return ch >= '0' && ch <= '9';
 }
 
-// Read on operand starting from p
+// Read an operand starting from p
 int read_operand(char *&p) {
     int res = 0;
     while (is_digit(*p)) {
         res *= 10;
         res += (*p - '0');
         p++;
-    }
-    if (*p == '\r') {
-        cout << "r" << endl;
-    }
-    if (!p) {
-        cout << "0" << endl;
     }
     return res;
 }
@@ -123,7 +119,9 @@ double calcu(char op, double opnd1, double opnd2) {
             return pow(opnd1, opnd2);
             break;
         default:
-            throw "Illegal operator.";
+            string msg = "Illegal operator: ";
+            msg.push_back(op);
+            throw msg;
     }
 }
 
@@ -142,11 +140,13 @@ double evaluate(char *p) {
     oprt.push(0);
 
     while (!oprt.empty()) {
-        if (is_digit(*p)) {
-            // Read operand
-            int operand = read_operand(p);
-            opnd.push(operand);
-        } else {
+      if (is_digit(*p)) {
+        // Read operand
+        int operand = read_operand(p);
+        opnd.push(operand);
+      } else if (*p == ' ') {
+          p++;
+      } else {
             char res = get_priority(oprt.top(), *p);
             switch (res) {
                 case '<':
@@ -158,6 +158,12 @@ double evaluate(char *p) {
                 case '>': {
                     // The current operator has lower priority
                     // Calculate and push the result
+                    if (opnd.empty()) {
+                        string msg = "Illegal expression: ";
+                        msg.push_back(oprt.top());
+                        msg.push_back(*p);
+                        throw msg;
+                    }
                     char op = oprt.pop();
                     if (op == '!') {
                         // The unique unary operator

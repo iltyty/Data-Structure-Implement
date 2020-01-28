@@ -96,7 +96,7 @@ void test_parenthesis() {
 }
 
 void test_evaluate() {
-    char *expr;
+    char expr[100];
     cout << "test6 function evaluate" << endl;
     while (true) {
         cout << "\tinput an expresssion: ";
