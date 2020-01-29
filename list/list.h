@@ -197,7 +197,7 @@ void List<T>::insert(Rank rank, T elem) {
 // Remove the first element
 template <typename T>
 T List<T>::remove_first() {
-    Pos(T) first = first();
+    Pos(T) first = this->first();
     first->pre->next = first->next;
     first->next->pre = first->pre;
     T elem = first->data;
@@ -210,7 +210,7 @@ T List<T>::remove_first() {
 // Remove the last element
 template <typename T>
 T List<T>::remove() {
-    Pos(T) last = last();
+    Pos(T) last = this->last();
     last->pre->next = last->next;
     last->next->pre = last->pre;
     T elem = last->data;

@@ -17,6 +17,10 @@ class Queue: public List<T> {
         T & front() {
             return this->first()->data;
         }
+
+        T & rear() {
+            return this->last()->data;
+        }
 };
 
 #endif // __QUEUE_H_
