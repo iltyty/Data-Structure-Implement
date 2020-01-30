@@ -31,6 +31,7 @@ template <typename T> class BinTree {
 
     protected:
         int max(int a, int b);
+        void swap(T &a, T &b);
 
     public:
         BinTree();
@@ -71,6 +72,12 @@ template <typename T> class BinTree {
 
 template <typename T> int BinTree<T>::max(int a, int b) {
     return a > b ? a : b;
+}
+
+template <typename T> void BinTree<T>::swap(T &a, T &b) {
+    T tmp = a;
+    a = b;
+    b = a;
 }
 
 template <typename T> BinTree<T>::BinTree() : _size(0), _root(nullptr) {}
@@ -116,6 +123,7 @@ template <typename T> void BinTree<T>::update_height(BinPos(T) x) {
         int lheight = x->lchild ? x->lchild->height : 0;
         int rheight = x->rchild ? x->rchild->height : 0;
         x->height = 1 + max(lheight, rheight);
+        x = x->parent;
     }
 }
 
@@ -347,11 +355,13 @@ void BinTree<T>::init(Vector<T> &vector) {
             queue.enqueue(nodes[idx]);
             root->lchild = queue.rear();
             root->lchild->parent = root;
+            update_height(root->lchild);
         }
         if (++idx < size) {
             queue.enqueue(nodes[idx]);
             root->rchild = queue.rear();
             root->rchild->parent = root;
+            update_height(root->rchild);
         }
     }
     _size = size;
