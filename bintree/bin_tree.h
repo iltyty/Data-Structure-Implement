@@ -120,8 +120,8 @@ void BinTree<T>::remove(BinPos(T) &node) {
 template <typename T> void BinTree<T>::update_height(BinPos(T) x) {
     // All the way up to the root node
     while (x) {
-        int lheight = x->lchild ? x->lchild->height : 0;
-        int rheight = x->rchild ? x->rchild->height : 0;
+        int lheight = x->lchild ? x->lchild->height : -1;
+        int rheight = x->rchild ? x->rchild->height : -1;
         x->height = 1 + max(lheight, rheight);
         x = x->parent;
     }
