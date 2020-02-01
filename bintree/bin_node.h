@@ -93,6 +93,20 @@ struct BinNode {
         }
         return res;
     }
+
+    void attach_lchild(BinPos(T) v) {
+        lchild = v;
+        if (v) {
+            v->parent = this;
+        }
+    }
+
+    void attach_rchild(BinPos(T) v) {
+        rchild = v;
+        if (v) {
+            v->parent = this;
+        }
+    }
 };
 
 

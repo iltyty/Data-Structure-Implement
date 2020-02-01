@@ -1,27 +1,30 @@
 #include "avl.h"
+#include "splay.h"
 
 template <typename T>
 struct Print {
     virtual void operator () (BinPos(T) node) {
-        // cout << "node: " << node->data;
-        // if (node->parent) {
-        //     cout << " parent: " << node->parent->data;
-        // }
-        // if (node->lchild) {
-        //     cout << " lchild: " << node->lchild->data;
-        // }
-        // if (node->rchild) {
-        //     cout << " rchild: " << node->rchild->data;
-        // }
-        // cout << " height: " << node->height;
-        // cout << endl;
+        cout << "node: " << node->data;
+        if (node->parent) {
+            cout << " parent: " << node->parent->data;
+        }
+        if (node->lchild) {
+            cout << " lchild: " << node->lchild->data;
+        }
+        if (node->rchild) {
+            cout << " rchild: " << node->rchild->data;
+        }
+        cout << " height: " << node->height;
+        cout << endl;
 
-        cout << node->data << " ";
+        // cout << node->data << " ";
     }
 };
 
 template <typename T>
 void test_avl(int size);
+template <typename T>
+void test_splay(int size);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -29,7 +32,10 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    test_avl<int>(atoi(argv[1]));
+    int size = atoi(argv[1]);
+
+    // test_avl<int>(size);
+    test_splay<int>(size);
     return 0;
 }
 
@@ -51,4 +57,24 @@ void test_avl(int size) {
     // avl.remove(340);
     // cout << "after remove 340: ";
     // avl.traverse_in(Print<T>(), avl.root());
+}
+
+template <typename T>
+void test_splay(int size) {
+    Splay<T> splay;
+
+    srand(time(0));
+    for (int i = 0; i < 10; i++) {
+        int r = rand() % 100;
+        cout << r << " ";
+        splay.insert(r);
+        // cout << "insert: " << i;
+        // splay.insert(9 - i);
+        // cout << " current root: " << splay.root()->data << endl;
+    }
+
+    splay.traverse_in(Print<T>(), splay.root());
+    // cout << endl << "remove 7" << endl;
+    // splay.remove(0);
+    // splay.traverse_in(Print<T>(), splay.root());
 }
