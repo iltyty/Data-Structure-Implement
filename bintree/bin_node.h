@@ -60,7 +60,7 @@ struct BinNode {
 
     // Find the successor under the in-order traversal
     BinPos(T) successor() {
-        BinPos(T) p = nullptr;
+        BinPos(T) p = this;
         if (!this->rchild) {
             while (is_rchild()) {
                 p = p->parent;

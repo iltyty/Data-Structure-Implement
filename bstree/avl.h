@@ -16,6 +16,10 @@ template <typename T> class AVL: public BST<T> {
         void rotate_lr(BinPos(T) g, BinPos(T) p, BinPos(T) x, bool flag);
         void rotate_rl(BinPos(T) g, BinPos(T) p, BinPos(T) x, bool flag);
         void rotate_rr(BinPos(T) g, BinPos(T) p, BinPos(T) x, bool flag);
+        BinPos(T) refactor34(
+            BinPos(T), BinPos(T), BinPos(T), BinPos(T), BinPos(T),
+            BinPos(T), BinPos(T), BinPos(T), bool
+        );
     public:
         BinPos(T)& insert(const T &e);
         void remove(const T &e);
@@ -40,7 +44,10 @@ void AVL<T>::rotate_at(BinPos(T) x) {
                p  ...
               / \
              x  ...  */
-            rotate_ll(g, p, x, flag);
+
+            // rotate_ll(g, p, x, flag);
+            p->parent = g->parent;
+            refactor34(x, p, g, x->lchild, x->rchild, p->rchild, g->rchild, g, flag);
         } else {
             /*   g
                 / \
@@ -49,7 +56,10 @@ void AVL<T>::rotate_at(BinPos(T) x) {
                  x  ...
                 / \
               ... ...    */
-            rotate_lr(g, p, x, flag);
+
+            // rotate_lr(g, p, x, flag);
+            x->parent = g->parent;
+            refactor34(g, x, p, g->lchild, x->lchild, x->rchild, p->rchild, g, flag);
         }
     } else {
         if (p->is_lchild()) {
@@ -60,14 +70,18 @@ void AVL<T>::rotate_at(BinPos(T) x) {
              * ... x
              *    / \
              *  ... ...  */
-            rotate_rl(g, p, x, flag);
+            // rotate_rl(g, p, x, flag);
+            x->parent = g->parent;
+            refactor34(p, x, g, p->lchild, x->lchild, x->rchild, g->rchild, g, flag);
         } else {
             /*     g
              *    / \
              *  ...  p
              *      / \
              *     ... x */
-            rotate_rr(g, p, x, flag);
+            // rotate_rr(g, p, x, flag);
+            p->parent = g->parent;
+            refactor34(g, p, x, g->lchild, p->lchild, x->lchild, x->rchild, g, flag);
         }
     }
 }
@@ -183,6 +197,60 @@ void AVL<T>::rotate_rr(BinPos(T) g, BinPos(T) p, BinPos(T) x, bool flag) {
 }
 
 template <typename T>
+BinPos(T) AVL<T>::refactor34(
+    BinPos(T) a, BinPos(T) b, BinPos(T) c, BinPos(T) T0, BinPos(T) T1,
+    BinPos(T) T2, BinPos(T) T3, BinPos(T) root, bool is_root
+) {
+    // connect nodes a, b, c and subtrees
+    // T0, T1, T2, T3 in in-order traversal
+    // e.g.
+    //        b
+    //      /   \
+    //     a     c
+    //   /   \ /   \
+    //  T0  T1 T2  T3
+
+    if (is_root) {
+        this->_root = b;
+    } else {
+        if (root->is_lchild()) {
+            root->parent->lchild = b;
+        } else {
+            root->parent->rchild = b;
+        }
+    }
+
+    a->lchild = T0;
+    a->rchild = T1;
+    if (T0) {
+        T0->parent = a;
+    }
+    if (T1) {
+        T1->parent = a;
+    }
+    this->update_height(a);
+
+    c->lchild = T2;
+    c->rchild = T3;
+    if (T2) {
+        T2->parent = c;
+    }
+    if (T3) {
+        T3->parent = c;
+    }
+    this->update_height(c);
+
+    b->lchild = a;
+    b->rchild = c;
+    a->parent = b;
+    c->parent = b;
+    this->update_height(b);
+
+    // Return the new root of the subtree
+    return b;
+}
+
+template <typename T>
 BinPos(T)& AVL<T>::insert(const T &e) {
     BinPos(T) &x = this->search(e);
     // No repeat element
@@ -197,7 +265,7 @@ BinPos(T)& AVL<T>::insert(const T &e) {
     // The lowest one of all ancestor nodes is
     // not lower than the grandfather node
    
-    for (BinPos(T) g = x->parent; g; g = g->parent) {
+    for (BinPos(T) g = this->_hot; g; g = g->parent) {
         if (!Balanced(g)) {
             // Imbalanced, perform rotation operation
             rotate_at(g->taller_child()->taller_child());
@@ -205,7 +273,7 @@ BinPos(T)& AVL<T>::insert(const T &e) {
             break;
         } else {
             // Balanced, update height of node g only
-            g->height = 1 + this->max(stature(g->lchild), stature(g->rchild));
+            this->update_height(g);
         }
     }
 
@@ -214,7 +282,22 @@ BinPos(T)& AVL<T>::insert(const T &e) {
 
 template <typename T>
 void AVL<T>::remove(const T &e) {
-   
+    BinPos(T) &x = this->search(e);
+    if (!x) {
+        // e does not exist
+        return;
+    }
+
+    this->remove_at(x, this->_hot);
+    this->_size--;
+
+    // x->parent may be nullptr
+    for (BinPos(T) g = this->_hot; g; g = g->parent) {
+        if (!Balanced(g)) {
+            rotate_at(g->taller_child()->taller_child());
+        }
+        this->update_height(g);
+    }
 }
 
 

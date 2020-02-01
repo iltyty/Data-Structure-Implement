@@ -15,6 +15,7 @@ struct Print {
         // }
         // cout << " height: " << node->height;
         // cout << endl;
+
         cout << node->data << " ";
     }
 };
@@ -39,8 +40,15 @@ void test_avl(int size) {
     srand(time(0));
     for (int i = 0; i < 100; i++) {
         avl.insert(rand() % 1000);
+        // avl.insert(i);
     }
+    // avl.insert(340);
 
-    BinPos(T) root = avl.root();
-    avl.traverse_in(Print<T>(), root);
+    // cout << "before remove: ";
+    avl.traverse_in(Print<T>(), avl.root());
+
+    // cout << endl;
+    // avl.remove(340);
+    // cout << "after remove 340: ";
+    // avl.traverse_in(Print<T>(), avl.root());
 }

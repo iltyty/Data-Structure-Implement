@@ -72,10 +72,9 @@ BinPos(T) BST<T>::remove_at(BinPos(T) &x, BinPos(T) &hot) {
     } else {
         // Left and right subtrees coexist
         // Find the successor of x under in-order traversal
-        BinPos(T) succ = x->successor();
-        p = succ;
+        p = x->successor();
         // Exchange data between x and succ
-        this->swap(x->data, succ->data);
+        this->swap(x->data, p->data);
         // succ has no left child
         q = p->rchild;
         if (p->parent->lchild == p) {
