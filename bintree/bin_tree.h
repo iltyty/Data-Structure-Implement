@@ -47,6 +47,7 @@ template <typename T> class BinTree {
         void remove(BinPos(T) &node);
 
         void update_height(BinPos(T) x);
+        void update_height_above(BinPos(T) x);
         BinPos(T) insert_lchild(BinPos(T) x, const T &elem);
         BinPos(T) insert_rchild(BinPos(T) x, const T &elem);
 
@@ -116,13 +117,16 @@ void BinTree<T>::remove(BinPos(T) &node) {
     }
 }
 
-// Update the height of subtree x and all its ancestor nodes
+// Update the height of subtree x
 template <typename T> void BinTree<T>::update_height(BinPos(T) x) {
+    x->height = 1 + max(stature(x->lchild), stature(x->rchild));
+}
+
+// Update the height of subtree x and all its ancestor nodes
+template <typename T> void BinTree<T>::update_height_above(BinPos(T) x) {
     // All the way up to the root node
     while (x) {
-        int lheight = x->lchild ? x->lchild->height : -1;
-        int rheight = x->rchild ? x->rchild->height : -1;
-        x->height = 1 + max(lheight, rheight);
+        update_height(x);
         x = x->parent;
     }
 }

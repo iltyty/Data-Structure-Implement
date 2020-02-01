@@ -2,6 +2,7 @@
 #define __BIN_NODE_H_
 
 #define BinPos(T) BinNode<T>*
+// x: BinPos(T)
 #define stature(x) ((x) ? (x)->height : -1)
 
 template <typename T>
@@ -41,6 +42,14 @@ struct BinNode {
         return rchild = new BinNode<T>(data, this);
     }
 
+    bool is_lchild() {
+        if (!this->parent) {
+            return false;
+        }
+
+        return this->parent->lchild == this;
+    }
+
     bool is_rchild() {
         if (!this->parent) {
             return false;
@@ -65,6 +74,13 @@ struct BinNode {
         }
 
         return p;
+    }
+
+    // Return the taller child of current node
+    // Used in rotation of AVL tree
+    BinPos(T) taller_child() {
+        return stature(this->lchild) >= stature(this->rchild) ?
+            this->lchild : this->rchild;
     }
 
     int size() {

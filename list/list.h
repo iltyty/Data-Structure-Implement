@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define Rank int
+typedef int Rank;
 
 // doubly linked list with header and trailer
 template <typename T>

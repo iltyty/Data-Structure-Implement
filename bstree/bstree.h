@@ -6,24 +6,24 @@
 
 template <typename T> class BST : public BinTree<T> {
     protected:
-        BinPos(T) _hot;
+        BinPos(T) _hot = nullptr;
 
     protected:
-        BinPos(T) & search_in(const T &e, BinPos(T) & root, BinPos(T) & hot);
+        BinPos(T)& search_in(const T &e, BinPos(T) & root, BinPos(T) & hot);
         BinPos(T) remove_at(BinPos(T) &x, BinPos(T) &hot);
 
     public:
-        virtual BinPos(T) & search(const T &e);
-        virtual BinPos(T) & insert(const T &e);
+        virtual BinPos(T)& search(const T &e);
+        virtual BinPos(T)& insert(const T &e);
         virtual void remove(const T &e);
 };
 
 
-template <typename T> BinPos(T) & BST<T>::search(const T &e) {
+template <typename T> BinPos(T)& BST<T>::search(const T &e) {
     return search_in(e, this->_root, _hot = nullptr);
 }
 
-template <typename T> BinPos(T) & BST<T>::search_in(
+template <typename T> BinPos(T)& BST<T>::search_in(
     const T &e,
     BinPos(T) & root,
     BinPos(T) & hot
@@ -42,16 +42,16 @@ template <typename T> BinPos(T) & BST<T>::search_in(
     }
 }
 
-template <typename T> BinPos(T) & BST<T>::insert(const T &e) {
-    BinPos(T) res = search(e);
+template <typename T> BinPos(T)& BST<T>::insert(const T &e) {
+    BinPos(T)& res = search(e);
     if (!res) {
-        // Prohibit identital element
+        // Prohibit repeat element
         res = new BinNode<T>(e, _hot);
         this->_size++;
-        this->update_height(res);
+        this->update_height_above(res);
     }
 
-    return e;
+    return res;
 }
 
 template <typename T>
@@ -103,7 +103,7 @@ template <typename T> void BST<T>::remove(const T &e) {
 
     remove_at(res, _hot);
     this->_size--;
-    this->update_height(_hot);
+    this->update_height_above(_hot);
 }
 
 #endif // __BSTREE_H_
