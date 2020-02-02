@@ -71,6 +71,9 @@ class Vector {
 
 template <typename  T>
 void Vector<T>::copy_from(T const *elems, Rank low, Rank high) {
+    if (high <= low) {
+        return;
+    }
     _capacity = 2 * (high - low);
 
     if (_elem) {
@@ -213,6 +216,11 @@ Vector<T>::Vector(T const *vector, Rank low, Rank high) {
 
 template <typename  T>
 Vector<T>::Vector(Vector<T> const &vector, Rank low, Rank high) {
+    if (high <= low) {
+        _size = 0;
+        _capacity = DEFAULT_CAPACITY;
+        _elem = new T[_capacity];
+    }
     copy_from(vector._elem, low, high);
 }
 

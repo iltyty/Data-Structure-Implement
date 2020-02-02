@@ -6,3 +6,5 @@ tmp/
 
 .ccls-cache/
 */*.out
+vgcore*
+*.gch
