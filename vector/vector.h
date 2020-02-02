@@ -57,7 +57,7 @@ class Vector {
         int uniquify();
         void traverse(void (*) (T&));
         // Overload operator
-        Vector<T> operator=(Vector<T> const&);
+        Vector<T>& operator=(Vector<T> const&);
         T& operator[](Rank rank);
         friend ostream & operator<<(ostream &os, Vector<T> &vector) {
             cout << "[ ";
@@ -513,8 +513,9 @@ void Vector<T>::traverse(void (*visit) (T&)) {
 
 // Overload operator "="
 template <typename T>
-Vector<T> Vector<T>::operator=(Vector<T> const &vector) {
-    return Vector<T>(vector);
+Vector<T>& Vector<T>::operator=(Vector<T> const &vector) {
+    copy_from(vector._elem, 0, vector._size);
+    return *this;
 }
 
 // Overload operator "[]"

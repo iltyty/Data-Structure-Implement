@@ -82,7 +82,8 @@ void test_opt_cout(Vector<T> &vector) {
 template <typename T>
 void test_opt_eq(Vector<T> &vector) {
     cout << "test2:  operator '='  ";
-    Vector<T> vector1 = vector;
+    Vector<T> vector1;
+    vector1 = vector;
     cout << vector1;
 }
 
@@ -91,9 +92,6 @@ void test_opt_brk(Vector<T> &vector) {
     cout << "test3:  operator '[]' ";
     cout << "[ ";
     for (int i = 0; i < vector.size(); i++) {
-        // TODO
-        // link error: undefined reference to `Vector<int>::print(int&)`
-        // vector.print(vector[i]);
         cout << vector[i] << " ";
     }
     cout << "]" << endl;
