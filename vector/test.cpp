@@ -27,6 +27,8 @@ template <typename T>
 void test_merge_sort(Vector<T> &vector);
 template <typename T>
 void test_disordered(Vector<T> &vector);
+template <typename T>
+void test_search_seq(Vector<T> &vector);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -68,6 +70,7 @@ void test_vector(int size) {
     test_bubble_sort_c(vector2);
     test_merge_sort(vector3);
     test_disordered(vector4);
+    test_search_seq(vector);
 }
 
 template <typename T>
@@ -175,4 +178,15 @@ void test_disordered(Vector<T> &vector) {
     cout << "        after sort: " << vector;
     cout << "        disordered: " << (vector.disordered() ?
         "true" : "false") << endl;
+}
+
+template <typename T>
+void test_search_seq(Vector<T> &vector) {
+    Vector<T> vec(vector);
+    vec.sort();
+    cout << "test13: function search_seq" << endl;
+    cout << "        vector: " << vec;
+    cout << "        search " << vec[3] << ": " << vec.search_seq(vec[3]) << endl;
+    cout << "        search -100: " << vec.search_seq(-100) << endl;
+    cout << "        search 9999: " << vec.search_seq(9999) << endl;
 }

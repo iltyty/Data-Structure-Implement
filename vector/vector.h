@@ -52,6 +52,8 @@ class Vector {
         // Iterator interfaces
         Rank search(T const &elem);
         Rank search(T const &elem, Rank low, Rank high);
+        Rank search_seq(T const &elem);
+        Rank search_seq(T const &elem, Rank low, Rank high);
         int uniquify();
         void traverse(void (*) (T&));
         // Overload operator
@@ -461,6 +463,26 @@ Rank Vector<T>::search(T const &elem) {
 template <typename T>
 Rank Vector<T>::search(T const &elem, Rank low, Rank high) {
     return Vector<T>::bin_search_c(_elem, elem, low, high);
+}
+
+template <typename T>
+Rank Vector<T>::search_seq(T const &elem) {
+    return (_size > 0) ?
+        search_seq(elem, 0, _size) : -1;
+}
+
+template <typename T>
+Rank Vector<T>::search_seq(const T &elem, Rank low, Rank high) {
+    int i;
+    for (i = 0; i < _size; i++) {
+        if (_elem[i] == elem) {
+            // Search succeed
+            return i;
+        } else if (_elem[i] > elem) {
+            return --i;
+        }
+    }
+    return --i;
 }
 
 /*
