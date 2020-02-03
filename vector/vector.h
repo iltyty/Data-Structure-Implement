@@ -41,6 +41,7 @@ class Vector {
         int insert(Rank rank, T elem);
         int append(T elem);
         int remove(Rank rank);
+        void concat(Vector<T> vec);
         int disordered();
         void sort();
         // Bubble sort, all stable
@@ -323,6 +324,13 @@ int Vector<T>::remove(Rank rank) {
     // Shrink when necessary
     shrink();
     return 0;
+}
+
+template <typename T>
+void Vector<T>::concat(Vector<T> vec) {
+    for (int i = 0; i < vec.size(); i++) {
+        append(vec[i]);
+    }
 }
 
 /* Whether the vector is disordered or not

@@ -29,6 +29,8 @@ template <typename T>
 void test_disordered(Vector<T> &vector);
 template <typename T>
 void test_search_seq(Vector<T> &vector);
+template <typename T>
+void test_concat(Vector<T> &vector);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -71,6 +73,7 @@ void test_vector(int size) {
     test_merge_sort(vector3);
     test_disordered(vector4);
     test_search_seq(vector);
+    test_concat(vector);
 }
 
 template <typename T>
@@ -187,4 +190,14 @@ void test_search_seq(Vector<T> &vector) {
     cout << "        search " << vec[3] << ": " << vec.search_seq(vec[3]) << endl;
     cout << "        search -100: " << vec.search_seq(-100) << endl;
     cout << "        search 9999: " << vec.search_seq(9999) << endl;
+}
+
+template <typename T>
+void test_concat(Vector<T> &vector1) {
+    Vector<T> vector2(vector1);
+    cout << "test14: function concat" << endl;
+    cout << "        vector1: " << vector1;
+    cout << "        vector2: " << vector2;
+    vector2.concat(vector1);
+    cout << "        after concat: " << vector2;
 }
