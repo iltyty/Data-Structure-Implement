@@ -1,6 +1,8 @@
 #ifndef __BTNODE_H_
 #define __BTNODE_H_
 
+#include <cmath>
+
 #include "../vector/vector.h"
 
 #define BTPos(T) BTNode<T> *
@@ -41,6 +43,37 @@ template <typename T> struct BTNode {
         childs = Vector<BTPos(T)>(x.childs, low, high + 1);
     }
 
+    // In-order successor of key code keys[r]
+    // Assert: x is a non-leaf node, r is legal
+    BTPos(T) succ(int r) {
+        BTPos(T) p = this->childs[r + 1];
+        while (p->childs[0]) {
+            p = p->childs[0];
+        }
+        return p;
+    }
+
+    // Get the index of the current node
+    // in its parent's childs vector
+    int get_index() {
+        if (!this->parent) {
+            return -1;
+        }
+
+        Vector<BTPos(T)> childs = this->parent->childs;
+        int size = childs.size();
+        for (int i = 0; i < size; i++) {
+            if (childs[i] == this) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    bool is_leaf_node() {
+        return !this->childs[0];
+    }
+
     // Attach node x as the rth child
     bool attach_child(int r, BTPos(T) x) {
         // Illegal r
@@ -51,6 +84,29 @@ template <typename T> struct BTNode {
         childs[r] = x;
         x->parent = this;
         return true;
+    }
+
+    bool able_to_lend(int order) {
+        return keys.size() >= ceil((double) order / 2);
+    }
+
+    // r indicates the index of the current
+    // node in its parent's childs vector
+    bool has_left_sibling(int r) {
+        if (!this->parent) {
+            return false;
+        }
+
+        return (r - 1) >= 0;
+    }
+
+    // r: ditto
+    bool has_right_sibling(int r) {
+        if (!this->parent) {
+            return false;
+        }
+
+        return (r + 1) < this->parent->childs.size();
     }
 
     /*

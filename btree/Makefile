@@ -15,7 +15,7 @@ clean:
 	rm -f *.o *.out
 
 run:
-	./${OUTPUT} 100
+	./${OUTPUT} 10
 
 all: clean build run
 

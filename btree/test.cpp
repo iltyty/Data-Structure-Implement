@@ -1,8 +1,20 @@
 #include "btree.h"
+#include "../vector/vector.h"
 
 template <typename T>
 struct Print {
     virtual void operator () (T e) {
+        // cout << "node: " << x->keys;
+        // if (x->parent) {
+        //     cout << "parent: " << x->parent->keys;
+        // }
+        // int size = x->childs.size();
+        // for (int i = 0; i < size; i++) {
+        //     if (x->childs[i]) {
+        //         cout << "child " << i << ": " << x->childs[i]->keys;
+        //     }
+        // }
+        // cout << endl;
         cout << e << " ";
     }
 };
@@ -23,12 +35,25 @@ int main(int argc, char *argv[]) {
 
 template <typename T>
 void test_btree(int size) {
-    BTree<T> btree(2);
+    Vector<T> vector;
+    BTree<T> btree(3);
 
     srand(time(0));
     for (int i = 0; i < size; i++) {
-        btree.insert(rand() % 1000);
+        int r = rand() % 100;
+        btree.insert(r);
+        vector.append(r);
     }
 
     btree.traverse_in(Print<T>(), btree.root());
+
+    cout << endl;
+    for (int i = 0; i < size; i++) {
+        cout << "remove " << vector[i] << ": ";
+        btree.remove(vector[i]);
+        btree.traverse_in(Print<T>(), btree.root());
+        cout << endl;
+    }
+
+    cout << "size: " << btree.size();
 }
