@@ -9,7 +9,7 @@ SRC = test.cpp
 OUTPUT = bstree.out
 
 build:
-	${CC} ${SRC} -o ${OUTPUT}
+	${CC} ${SRC} -g -o ${OUTPUT}
 
 clean:
 	rm -f *.o *.out
