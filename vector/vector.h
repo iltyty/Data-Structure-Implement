@@ -35,7 +35,7 @@ class Vector {
         int capacity();
         T get(Rank rank);
         void print(T &elem);
-        bool empty();
+        bool empty() const;
         // Writable interfaces
         int put(Rank rank, T elem);
         int insert(Rank rank, T elem);
@@ -228,6 +228,11 @@ Vector<T>::Vector(Vector<T> const &vector, Rank low, Rank high) {
 
 template <typename  T>
 Vector<T>::Vector(Vector<T> const &vector) {
+    if (vector.empty()) {
+        _size = 0;
+        _capacity = DEFAULT_CAPACITY;
+        _elem = new T[_capacity];
+    }
     copy_from(vector._elem, 0, vector._size);
 }
 
@@ -259,7 +264,7 @@ void Vector<T>::print(T &elem) {
 }
 
 template <typename T>
-bool Vector<T>::empty() {
+bool Vector<T>::empty() const {
     return !_size;
 }
 
