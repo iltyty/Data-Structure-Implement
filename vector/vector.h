@@ -39,6 +39,7 @@ class Vector {
         // Writable interfaces
         int put(Rank rank, T elem);
         int insert(Rank rank, T elem);
+        int append(T elem);
         int remove(Rank rank);
         int disordered();
         void sort();
@@ -291,6 +292,11 @@ int Vector<T>::put(Rank rank, T elem) {
 template <typename T>
 int Vector<T>::insert(Rank rank, T elem) {
     return put(rank, elem);
+}
+
+template <typename T>
+int Vector<T>::append(T elem) {
+    return put(_size, elem);
 }
 
 /*
