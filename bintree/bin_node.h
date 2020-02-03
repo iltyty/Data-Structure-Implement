@@ -5,12 +5,18 @@
 // x: BinPos(T)
 #define stature(x) ((x) ? (x)->height : -1)
 
+typedef enum {
+    Red, Black
+}RBColor;
+
 template <typename T>
 struct BinNode {
     // data field
     T data;
     // subtree height
     int height;
+    // color (Red-black tree)
+    RBColor color;
     // parent node
     BinPos(T) parent;
     // left child node
@@ -18,13 +24,13 @@ struct BinNode {
     // right child node
     BinPos(T) rchild;
 
-    BinNode(const T &data):
-        data(data), height(0), parent(nullptr),
-        lchild(nullptr), rchild(nullptr) {}
+    BinNode(const T &data, int height = 0):
+        data(data), height(height), parent(nullptr),
+        lchild(nullptr), rchild(nullptr), color(RBColor::Red) {}
 
-    BinNode(const T &data, BinPos(T) parent):
-        data(data), parent(parent), height(0),
-        lchild(nullptr), rchild(nullptr) {}
+    BinNode(const T &data, BinPos(T) parent, int height = 0):
+        data(data), parent(parent), height(height),
+        lchild(nullptr), rchild(nullptr), color(RBColor::Red) {}
 
     BinPos(T) insert_lchild(const T &data) {
         if (lchild) {
@@ -107,7 +113,17 @@ struct BinNode {
             v->parent = this;
         }
     }
+
+    bool is_red() {
+        return color == Red;
+    }
+
+    bool is_black() {
+        return color == Black;
+    }
+
 };
+
 
 
 #endif // __BIN_NODE_H_

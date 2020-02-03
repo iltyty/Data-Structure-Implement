@@ -1,5 +1,6 @@
 #include "avl.h"
 #include "splay.h"
+#include "rbtree.h"
 
 template <typename T>
 struct Print {
@@ -15,6 +16,7 @@ struct Print {
             cout << " rchild: " << node->rchild->data;
         }
         cout << " height: " << node->height;
+        cout << " color: " << (node->is_black() ? "black" : "red");
         cout << endl;
 
         // cout << node->data << " ";
@@ -25,6 +27,8 @@ template <typename T>
 void test_avl(int size);
 template <typename T>
 void test_splay(int size);
+template <typename T>
+void test_rbtree(int size);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -35,7 +39,8 @@ int main(int argc, char *argv[]) {
     int size = atoi(argv[1]);
 
     // test_avl<int>(size);
-    test_splay<int>(size);
+    // test_splay<int>(size);
+    test_rbtree<int>(size);
     return 0;
 }
 
@@ -44,9 +49,9 @@ void test_avl(int size) {
     AVL<T> avl;
 
     srand(time(0));
-    for (int i = 0; i < 100; i++) {
-        avl.insert(rand() % 1000);
-        // avl.insert(i);
+    for (int i = 0; i < 10; i++) {
+        // avl.insert(rand() % 1000);
+        avl.insert(i);
     }
     // avl.insert(340);
 
@@ -77,4 +82,17 @@ void test_splay(int size) {
     // cout << endl << "remove 7" << endl;
     // splay.remove(0);
     // splay.traverse_in(Print<T>(), splay.root());
+}
+
+template <typename T>
+void test_rbtree(int size) {
+    RBTree<T> rbtree;
+
+    srand(time(0));
+    for (int i = 0; i < size; i++) {
+        // cout << rand() % 100 << endl;
+        rbtree.insert(rand() % 100);
+    }
+
+    rbtree.traverse_in(Print<T>(), rbtree.root());
 }
