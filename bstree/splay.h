@@ -55,7 +55,7 @@ BinPos(T) Splay<T>::splay(BinPos(T) v) {
         }
 
         if (gg) {
-            if (g->is_lchild()) {
+            if (g == gg->lchild) {
                 gg->attach_lchild(v);
             } else {
                 gg->attach_rchild(v);
@@ -137,9 +137,7 @@ void Splay<T>::remove(const T &e) {
         return;
     }
 
-    cout << "enter" << endl;
     BinPos(T) &x = search(e);
-    cout << "x: " << x->data;
     BinPos(T) p = x;
     if (x->data != e) {
         // Search failed, e does not exist, no need to remove
