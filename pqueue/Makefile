@@ -6,7 +6,7 @@
 
 CC = g++
 SRC = test.cpp
-OUTPUT = bin_tree.out
+OUTPUT = pq.out
 
 build:
 	${CC} ${SRC} -g -o ${OUTPUT}

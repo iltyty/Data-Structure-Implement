@@ -15,6 +15,8 @@ struct BinNode {
     T data;
     // subtree height
     int height;
+    // null path length
+    int npl;
     // color (Red-black tree)
     RBColor color;
     // parent node
@@ -25,11 +27,11 @@ struct BinNode {
     BinPos(T) rchild;
 
     BinNode(const T &data, int height = 0):
-        data(data), height(height), parent(nullptr),
+        data(data), height(height), parent(nullptr), npl(1),
         lchild(nullptr), rchild(nullptr), color(RBColor::Red) {}
 
     BinNode(const T &data, BinPos(T) parent, int height = 0):
-        data(data), parent(parent), height(height),
+        data(data), parent(parent), height(height), npl(1),
         lchild(nullptr), rchild(nullptr), color(RBColor::Red) {}
 
     BinPos(T) insert_lchild(const T &data) {
