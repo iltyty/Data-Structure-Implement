@@ -1,5 +1,5 @@
 ##
-# Binary Tree Data Structure
+# Priority Queue Data Structure
 #
 # @file
 # @version 0.1

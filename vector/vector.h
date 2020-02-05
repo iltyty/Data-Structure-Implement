@@ -10,7 +10,7 @@ typedef int Rank;
 
 template <typename T>
 class Vector {
-    private:
+    protected:
         Rank _size;    // current scale
         int _capacity; // total capacity
         T *_elem = nullptr;
