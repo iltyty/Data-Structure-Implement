@@ -22,6 +22,8 @@ void test_prefix(String &str);
 void test_suffix(String &str);
 void test_concat(String &str);
 void test_equal(String &str);
+void test_match_brute(String &str);
+void test_match_kmp(String &str);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -43,6 +45,8 @@ void test_string(int size) {
     test_suffix(str);
     test_concat(str);
     test_equal(str);
+    test_match_brute(str);
+    test_match_kmp(str);
 }
 
 void test_operator_add(String &str, int size) {
@@ -106,5 +110,23 @@ void test_equal(String &str) {
     bool flag2 = str.equal(str2);
     cout << "test6 equal" << endl;
     cout << str << "||" << endl << str1 << ": " << (flag1 ? "true" : "false") << endl;
-    cout << str << "==" << str2 << ": " << (flag2 ? "true" : "false") << endl;
+    cout << str << "==" << str2 << ": " << (flag2 ? "true\n\n" : "false\n\n");
+}
+
+void test_match_brute(String &str) {
+    String p = str.substr(10, 10);
+    int res = str.match_brute(p);
+    cout << "test7 brute force match" << endl;
+    cout << "pattern string: " << p;
+    cout << "text string: " << str;
+    cout << "match result: " << res << endl << endl;
+}
+
+void test_match_kmp(String &str) {
+    String p = str.substr(20, 10);
+    int res = str.match_kmp(p);
+    cout << "test8 kmp match" << endl;
+    cout << "pattern string: " << p;
+    cout << "text string: " << str;
+    cout << "match result: " << res << endl;
 }
