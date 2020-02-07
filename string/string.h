@@ -5,10 +5,27 @@
 
 #include "../vector/vector.h"
 
+const int LEN = 94;
+
+const char alphabet[LEN] = {
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
+    'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+    's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F',
+    'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+    'U', 'V', 'W', 'X', 'Y', 'Z', '`', '~', '!', '@', '#', '$', '%', '^',
+    '&', '*', '(', ')', '-', '+', '_', '=', '{', '}', '[', ']', '\\', '|',
+    ';', ':', '\'', '"', ',', '<', '>', '.', '?', '/',
+};
+
 class String: public Vector<char> {
     protected:
+        int max(int a, int b);
         int* get_next(char *p);
         int* get_next(String p);
+        int* get_bc(char *p);
+        int* get_bc(String p);
+        int* get_gs(char *p);
+        int* get_gs(String p);
     public:
         String() {}
         String(const char *str, int len);
@@ -23,10 +40,12 @@ class String: public Vector<char> {
         void concat(String str);
         bool equal(String str);
 
-        Rank match_brute(String pattern);
-        Rank match_brute(char *pattern);
-        Rank match_kmp(String pattern);
-        Rank match_kmp(char *pattern);
+        Rank match_brute(String p);
+        Rank match_brute(char *p);
+        Rank match_kmp(String p);
+        Rank match_kmp(char *p);
+        Rank match_bm(String p);
+        Rank match_bm(char *p);
 
         String& operator += (String str);
         String& operator += (char ch);
@@ -176,6 +195,59 @@ Rank String::match_kmp(String pattern) {
 
 Rank String::match_kmp(char *p) {
     return match_kmp(String(p, strlen(p)));
+}
+
+int* String::get_bc(char *p) {
+    return get_bc(String(p, strlen(p)));
+}
+
+int* String::get_bc(String p) {
+    int *bc = new int[256];
+    // Initiate bc
+    memset(bc, -1, 256);
+    int size = p._size;
+    for (int i = 0; i < size; i++) {
+        bc[p[i]] = i;
+    }
+    return bc;
+}
+
+int* String::get_gs(char *p) {
+    return get_gs(String(p, strlen(p)));
+}
+
+int* String::get_gs(String p) {
+   
+}
+
+Rank String::match_bm(char *p) {
+    return match_bm(String(p, strlen(p)));
+}
+
+Rank String::match_bm(String p) {
+    int i, j;
+    int m = p._size;
+    int n = this->_size;
+    int *bc = get_bc(p);
+    int *gs = get_gs(p);
+
+    int step;
+    for (i = 0; i < n - m + 1; i++) {
+        for (j = m - 1; j >= 0; j--) {
+            if (_elem[i + j] != p[j]) {
+                step = max(j - bc[p[j]], gs[j]);
+                i += step;
+            }
+        }
+        if (j == m) {
+            break;
+        }
+    }
+    return i;
+}
+
+int String::max(int a, int b) {
+    return a > b ? a : b;
 }
 
 #endif // __STRING_H_

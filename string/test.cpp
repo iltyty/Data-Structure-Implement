@@ -3,18 +3,6 @@ using namespace std;
 
 #include "string.h"
 
-const int LEN = 94;
-
-const char alphabet[LEN] = {
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
-    'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-    's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F',
-    'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-    'U', 'V', 'W', 'X', 'Y', 'Z', '`', '~', '!', '@', '#', '$', '%', '^',
-    '&', '*', '(', ')', '-', '+', '_', '=', '{', '}', '[', ']', '\\', '|',
-    ';', ':', '\'', '"', ',', '<', '>', '.', '?', '/',
-};
-
 void test_string(int size);
 void test_operator_add(String &str, int size);
 void test_substr(String &str);
